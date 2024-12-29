@@ -1,0 +1,125 @@
+  stages:
+    prepare:
+      cmd: python src/prepare.py data/data.xml
+      deps:
+      - params.yaml
+      - src/prepare.py
+      outs:
+      - data/prepared/
+
+    featurization:
+      cmd: python src/featurization.py data/prepared data/featured
+      deps:
+      - params.yaml
+      - data/prepared/
+      - src/featurization.py
+      outs:
+      - data/featured/
+
+    train:
+      cmd: python src/train.py data/featured data/model
+      deps:
+      - params.yaml
+      - data/featured/
+      - src/train.py
+      outs:
+      - data/model/
+
+    evaluate:
+      cmd: python src/evaluate.py data/model data/featured
+      deps:
+      - data/model/
+      - src/evaluate.py
+      outs:
+      - data/metrics/
+
+  metrics:
+  - eval/metrics.json
+  - data/metrics/metrics.json
+  plots:
+  - eval/plots/images
+  - eval/plots/sklearn/roc/train.json:
+      template: simple
+      x: fpr
+      y: tpr
+      title: Receiver operating characteristic (ROC)
+      x_label: False Positive Rate
+      y_label: True Positive Rate
+  - eval/plots/sklearn/prc/train.json:
+      template: simple
+      x: recall
+      y: precision
+      title: Precision-Recall Curve
+      x_label: Recall
+      y_label: Precision
+  - eval/plots/sklearn/cm/train.json:
+      template: confusion
+      x: actual
+      y: predicted
+      title: Confusion Matrix
+      x_label: True Label
+      y_label: Predicted Label
+  - eval/plots/sklearn/roc/test.json:
+      template: simple
+      x: fpr
+      y: tpr
+      title: Receiver operating characteristic (ROC)
+      x_label: False Positive Rate
+      y_label: True Positive Rate
+  - eval/plots/sklearn/prc/test.json:
+      template: simple
+      x: recall
+      y: precision
+      title: Precision-Recall Curve
+      x_label: Recall
+      y_label: Precision
+  - eval/plots/sklearn/cm/test.json:
+      template: confusion
+      x: actual
+      y: predicted
+      title: Confusion Matrix
+      x_label: True Label
+      y_label: Predicted Label
+  - data/metrics/plots/images
+  - data/metrics/plots/sklearn/roc/train.json:
+      template: simple
+      x: fpr
+      y: tpr
+      title: Receiver operating characteristic (ROC)
+      x_label: False Positive Rate
+      y_label: True Positive Rate
+  - data/metrics/plots/sklearn/prc/train.json:
+      template: simple
+      x: recall
+      y: precision
+      title: Precision-Recall Curve
+      x_label: Recall
+      y_label: Precision
+  - data/metrics/plots/sklearn/cm/train.json:
+      template: confusion
+      x: actual
+      y: predicted
+      title: Confusion Matrix
+      x_label: True Label
+      y_label: Predicted Label
+  - data/metrics/plots/sklearn/roc/test.json:
+      template: simple
+      x: fpr
+      y: tpr
+      title: Receiver operating characteristic (ROC)
+      x_label: False Positive Rate
+      y_label: True Positive Rate
+  - data/metrics/plots/sklearn/prc/test.json:
+      template: simple
+      x: recall
+      y: precision
+      title: Precision-Recall Curve
+      x_label: Recall
+      y_label: Precision
+  - data/metrics/plots/sklearn/cm/test.json:
+      template: confusion
+      x: actual
+      y: predicted
+      title: Confusion Matrix
+      x_label: True Label
+      y_label: Predicted Label

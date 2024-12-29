@@ -1,0 +1,71 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/data.xml
+    deps:
+    - path: params.yaml
+      hash: md5
+      md5: 9f4c222b67c94e025726f3273725f31d
+      size: 152
+    - path: src/prepare.py
+      hash: md5
+      md5: 188f251feb4c038b9c3d8e69ad16385c
+      size: 2627
+    outs:
+    - path: data/prepared/
+      hash: md5
+      md5: c7333f9e0b69161b834e9b4917e4bd9b.dir
+      size: 8447363
+      nfiles: 2
+  featurization:
+    cmd: python src/featurization.py data/prepared data/featured
+    deps:
+    - path: data/prepared/
+      hash: md5
+      md5: c7333f9e0b69161b834e9b4917e4bd9b.dir
+      size: 8447363
+      nfiles: 2
+    - path: src/featurization.py
+      hash: md5
+      md5: 0b39b0b9674f4acfc6f86893328ca04a
+      size: 4294
+    outs:
+    - path: data/featured/
+      hash: md5
+      md5: 3fd434cbddeacaa902d00a27af3e0555.dir
+      size: 1556290
+      nfiles: 2
+  train:
+    cmd: python src/train.py data/featured data/model
+    deps:
+    - path: data/featured/
+      hash: md5
+      md5: 3fd434cbddeacaa902d00a27af3e0555.dir
+      size: 1556290
+      nfiles: 2
+    - path: src/train.py
+      hash: md5
+      md5: 71c70dbf6257cec4fea955eaf1340660
+      size: 1731
+    outs:
+    - path: data/model/
+      hash: md5
+      md5: 198093a4a38e94b58ccf01686ab40d9f
+      size: 1855041
+  evaluate:
+    cmd: python src/evaluate.py data/model data/featured
+    deps:
+    - path: data/model/
+      hash: md5
+      md5: 198093a4a38e94b58ccf01686ab40d9f
+      size: 1855041
+    - path: src/evaluate.py
+      hash: md5
+      md5: 4460d74fb449c07710663d24970e4142
+      size: 3433
+    outs:
+    - path: data/metrics/
+      hash: md5
+      md5: 8693455294565dfbd6a94165b70e3cc2.dir
+      size: 1408341
+      nfiles: 8
